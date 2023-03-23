@@ -44,3 +44,46 @@ const DishInfo = sequelize.define('dish_info', {
     title: {type: DataTypes.STRING, unique: true, allowNull: false},
     description: {type: DataTypes.STRING, allowNull: false}
 });
+
+const TypeCM = sequelize.define('type_cm', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+});
+
+User.hasOne(Tray);
+Tray.belongsTo(User);
+
+User.hasMany(Rating);
+Rating.belongsTo(User);
+
+Tray.hasMany(TrayDish);
+TrayDish.belongsTo(Tray);
+
+TrayDish.hasOne(Dish);
+Dish.belongsTo(TrayDish);
+
+Dish.hasMany(DishInfo);
+DishInfo.belongsTo(Dish);
+
+Dish.hasMany(Rating);
+Rating.belongsTo(Dish);
+
+Type.hasMany(Dish);
+Dish.belongsTo(Type);
+
+CookingMethod.hasMany(Dish);
+Dish.belongsTo(CookingMethod);
+
+Type.belongsToMany(CookingMethod, {through: TypeCM});
+CookingMethod.belongsToMany(Type, {through: TypeCM});
+
+module.exports = {
+    User, 
+    Tray,
+    TrayDish,
+    Dish,
+    Type, 
+    CookingMethod,
+    Rating,
+    DishInfo,
+    TypeCM
+}
