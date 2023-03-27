@@ -61,7 +61,7 @@ TrayDish.belongsTo(Tray);
 TrayDish.hasOne(Dish);
 Dish.belongsTo(TrayDish);
 
-Dish.hasMany(DishInfo);
+Dish.hasMany(DishInfo, {as: 'info'});
 DishInfo.belongsTo(Dish);
 
 Dish.hasMany(Rating);

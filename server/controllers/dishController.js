@@ -1,5 +1,5 @@
 const uuid = require('uuid');
-const { Dish } = require('../models/models');
+const { Dish, DishInfo } = require('../models/models');
 const ApiError = require('../error/ApiError');
 const path = require('path');
 
@@ -11,6 +11,18 @@ class DishController {
             let fileName = uuid.v4() + ".jpg";
             img.mv(path.resolve(__dirname, '..', 'static', fileName));
             
+            if (info) {
+                info = JSON.parse(info);
+                info.forEach(i => 
+                    DishInfo.create({
+                        title: i.title,
+                        description: i.description,
+                        dishId: dish.id
+                    })
+                )
+            }
+
+
             const dish = await Dish.create({ name, price, typeId, cookingMethodId, img: fileName });
             return res.json(dish);
         } catch (e) {
@@ -19,7 +31,7 @@ class DishController {
     }
 
     async getAll(req, res) {
-        let { typeId, cookingMethodId, limit, page } = req.query;
+        let { typeId, cookingMethodId, limit, page, info } = req.query;
         page = page || 1;
         limit = limit || 9;
         let offset = page * limit - limit;
@@ -39,7 +51,19 @@ class DishController {
         return res.json(dishes);
     }
 
-    async getOne(req, res) {}
+    async getOne(req, res) {
+        
+        const { id } = req.params;
+        
+        const dish = await Dish.findOne(
+            {
+                where: {id}, 
+                include: [{model: DishInfo, as: 'info'}]
+            },
+        )
+        return res.json(dish);
+    }
+    
 }
 
 module.exports = new DishController();
