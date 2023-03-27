@@ -19,19 +19,22 @@ class DishController {
     }
 
     async getAll(req, res) {
-        const { typeId, cookingMethodId } = req.query;
+        let { typeId, cookingMethodId, limit, page } = req.query;
+        page = page || 1;
+        limit = limit || 9;
+        let offset = page * limit - limit;
         let dishes; 
         if ( !typeId && !cookingMethodId ) {
-            dishes = await Dish.findAll();
+            dishes = await Dish.findAndCountAll({ limit, offset });
         }
         if ( typeId && !cookingMethodId ) {
-            dishes = await Dish.findAll({where: {typeId}});
+            dishes = await Dish.findAndCountAll({where: {typeId}, limit, offset});
         }
         if ( !typeId && cookingMethodId ) {
-            dishes = await Dish.findAll({where: {cookingMethodId}});
+            dishes = await Dish.findAndCountAll({where: {cookingMethodId}, limit, offset});
         }
         if ( typeId && cookingMethodId ) {
-            dishes = await Dish.findAll({where: {typeId, cookingMethodId}});
+            dishes = await Dish.findAndCountAll({where: {typeId, cookingMethodId}, limit, offset});
         }
         return res.json(dishes);
     }
