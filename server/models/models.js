@@ -20,7 +20,7 @@ const Dish = sequelize.define('dish', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, unique: true, allowNull: false},
     price: {type: DataTypes.INTEGER, allowNull: false},
-    rating: {type: DataTypes.FLOAT, allowNull: false},
+    rating: {type: DataTypes.FLOAT, defaultValue: 0.0},
     img: {type: DataTypes.STRING, allowNull: false},
 });
 
