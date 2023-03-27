@@ -21,7 +21,7 @@ const Dish = sequelize.define('dish', {
     name: {type: DataTypes.STRING, unique: true, allowNull: false},
     price: {type: DataTypes.INTEGER, allowNull: false},
     rating: {type: DataTypes.FLOAT, allowNull: false},
-    img: {ttpe: DataTypes.STRING, allowNull: false},
+    img: {type: DataTypes.STRING, allowNull: false},
 });
 
 const Type = sequelize.define('type', {
