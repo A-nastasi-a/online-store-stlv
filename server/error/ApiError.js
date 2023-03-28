@@ -6,15 +6,15 @@ class ApiError extends Error {
     }
 
     static badRequest(msg) {
-        new ApiError(404, msg);
+        return new ApiError(404, msg);
     }
 
     static internal(msg) {
-        new ApiError(500, msg);
+        return new ApiError(500, msg);
     }
 
     static forbidden(msg) {
-        new ApiError(403, msg);
+       return new ApiError(403, msg);
     }
 }
 
