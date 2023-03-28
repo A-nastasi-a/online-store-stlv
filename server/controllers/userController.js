@@ -24,11 +24,21 @@ class UserController {
         const user = await User.create({email, password: hashPassword, role});
         const tray = await Tray.create({userId: user.id});
         const token = generateJwt(user.id, user.email, user.role);
-        return res.json(token);
+        return res.json({token});
     }   
 
-    async login(req, res) {
-        
+    async login(req, res, next) {
+        const { email, password } = req.body;
+        const user = await User.findOne({where: {email}});
+        if (!user) {
+            return next(ApiError.internal('There is no user with such email'));
+        };
+        let comparePassord = bcrypt.compareSync(password, user.password);
+        if (!comparePassord) {
+            return next(ApiError.internal('Incorrect password'));
+        };
+        const token = generateJwt(user.id, user.password, user.role);
+        return res.json({token});
     }
 
     async check(req, res, next) {
