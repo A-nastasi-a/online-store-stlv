@@ -52,7 +52,6 @@ class DishController {
     }
 
     async getOne(req, res) {
-        
         const { id } = req.params;
         
         const dish = await Dish.findOne(
@@ -64,6 +63,15 @@ class DishController {
         return res.json(dish);
     }
     
+    async delete(req, res, next) {
+        const { id } = req.params;
+        const deleteDish = await Dish.findOne({where: {id}});
+        if (!deleteDish) {
+            return res.status(404).json({message: 'there is no such dish'});
+        }
+        await Dish.destroy({where: {id}});
+        return res.json({message: 'dish was deleted'});
+    }
 }
 
 module.exports = new DishController();
